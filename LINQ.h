@@ -46,7 +46,7 @@ static inline TOriginContainer OrderBy
 {
 
     auto comparor = [&_func](
-            typename TOriginContainer::value_type elem1&,
+            typename TOriginContainer::value_type elem1,
             typename TOriginContainer::value_type elem2)
     {
         return _func(elem1) < _func(elem2);
@@ -118,7 +118,7 @@ static inline TOriginContainer<TSelected, TOriginAllocator> Select
         TSelectFunc _func
 )
 {
-    TOriginContainer<TSelected, TOriginAllocator> selected;
+    TOriginContainer<TSelected, std::allocator<TSelected>> selected;
     auto inserter = std::inserter(selected, selected.end());
     std::transform(std::begin(_origin), std::end(_origin), inserter, _func);
     return selected;
