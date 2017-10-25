@@ -112,7 +112,7 @@ template<
             typename TOriginAllocator,
             typename TSelectFunc
         >
-static inline TOriginContainer<TSelected, TOriginAllocator> Select
+static inline TOriginContainer<TSelected, std::allocator<TSelected>> Select
 (
         const TOriginContainer<TOriginElement, TOriginAllocator>& _origin,
         TSelectFunc _func
