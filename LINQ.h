@@ -1,5 +1,6 @@
 #include<iterator>
 #include <type_traits>
+#include <string>
 
 
 /*
@@ -122,4 +123,44 @@ static inline TOriginContainer<TSelected, std::allocator<TSelected>> Select
     auto inserter = std::inserter(selected, selected.end());
     std::transform(std::begin(_origin), std::end(_origin), inserter, _func);
     return selected;
+}
+
+
+
+//verifies if a class contains an element
+template <class TContainer, class TVal>
+static inline bool Contains(TContainer& container, const TVal& element)
+{
+    return std::find(std::begin(container), std::end(container), element) != container.end();
+}
+
+//for a string containing string test, specialize the template
+static inline bool Contains(std::string parent, std::string sub_string)
+{
+    return parent.find(sub_string) != std::string::npos;
+}
+
+
+template <typename TContainer, typename TPre>
+static bool All(TContainer& container, TPre pred)
+{
+    bool match = true;
+    for(auto & elem : container)
+    {
+        if(!pred(elem))
+            match = false;
+    }
+    return match;
+}
+
+template <typename TContainer, typename TPre>
+static bool None(TContainer &container, TPre pred)
+{
+    bool match = true;
+    for(auto & elem : container)
+    {
+        if(pred(elem))
+            match = false;
+    }
+    return match;
 }
