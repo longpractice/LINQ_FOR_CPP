@@ -2,7 +2,6 @@
 #include <type_traits>
 #include <string>
 
-
 /*
 ** A C++ Version of LINQ Where()
 ** Return a new container picking up only elements from a container that satisfy a certain criteria.
@@ -135,7 +134,14 @@ static inline bool Contains(TContainer& container, const TVal& element)
 }
 
 //for a string containing string test, specialize the template
-static inline bool Contains(std::string parent, std::string sub_string)
+template<>
+inline bool Contains(std::string& parent, const std::string& sub_string)
+{
+    return parent.find(sub_string) != std::string::npos;
+}
+
+//for a string containing string test, specialize the template
+inline bool Contains(std::string& parent, const char* sub_string)
 {
     return parent.find(sub_string) != std::string::npos;
 }
