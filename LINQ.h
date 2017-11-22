@@ -1,7 +1,7 @@
 #include<iterator>
 #include <type_traits>
 #include <string>
-
+#include <algorithm>
 /*
 ** A C++ Version of LINQ Where()
 ** Return a new container picking up only elements from a container that satisfy a certain criteria.
@@ -172,7 +172,7 @@ static bool None(const TContainer &container, TPre pred)
 }
 
 
-template <typename TContainer, typename TTarget = double>
+template <typename TTarget = double, typename TContainer>
 static TTarget Mean(const TContainer &container)
 {
 	TTarget mean{};
@@ -186,8 +186,8 @@ static TTarget Mean(const TContainer &container)
 }
 
 
-template <typename TContainer, typename TTarget = double>
-static TTarget Variant(TContainer &container)
+template <typename TTarget = double, typename TContainer>
+static TTarget Variant(const TContainer &container)
 {
 	auto mean = Mean<TTarget>(container);
 	TTarget variant{};
@@ -201,8 +201,8 @@ static TTarget Variant(TContainer &container)
 }
 
 
-template <typename TContainer, typename TTarget = double>
-static TTarget Standard_Deviation(TContainer &container)
+template <typename TTarget = double, typename TContainer>
+static TTarget Standard_Deviation(const TContainer &container)
 {
 	auto variant = Variant<TTarget>(container);
 	TTarget standard_deviation = sqrt(variant);
