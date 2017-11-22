@@ -148,7 +148,7 @@ inline bool Contains(std::string& parent, const char* sub_string)
 
 
 template <typename TContainer, typename TPre>
-static bool All(TContainer& container, TPre pred)
+static bool All(const TContainer& container, TPre pred)
 {
     bool match = true;
     for(auto & elem : container)
@@ -160,7 +160,7 @@ static bool All(TContainer& container, TPre pred)
 }
 
 template <typename TContainer, typename TPre>
-static bool None(TContainer &container, TPre pred)
+static bool None(const TContainer &container, TPre pred)
 {
     bool match = true;
     for(auto & elem : container)
@@ -170,3 +170,42 @@ static bool None(TContainer &container, TPre pred)
     }
     return match;
 }
+
+
+template <typename TContainer, typename TTarget = double>
+static TTarget Mean(const TContainer &container)
+{
+	TTarget mean{};
+	for (auto &elem : container)
+	{
+		mean += elem;
+	}
+
+	mean /= container.size();
+	return mean;
+}
+
+
+template <typename TContainer, typename TTarget = double>
+static TTarget Variant(TContainer &container)
+{
+	auto mean = Mean<TTarget>(container);
+	TTarget variant{};
+	for (auto &elem : container)
+	{
+		variant += (elem - mean) * (elem - mean);
+	}
+
+	variant /= container.size();
+	return variant;
+}
+
+
+template <typename TContainer, typename TTarget = double>
+static TTarget Standard_Deviation(TContainer &container)
+{
+	auto variant = Variant<TTarget>(container);
+	TTarget standard_deviation = sqrt(variant);
+	return standard_deviation;
+}
+
