@@ -94,7 +94,7 @@ TOriginContainer OrderByDescending
 
 
 /*
-** A C++ Version of LINQ Select<TSelectedElement>()
+** A C++ Version of LINQ Select()
 **
 ** Return a new container with the elements transformed by TSelectFunc _func
 ** This could run not as member function but as a wrapper function.
