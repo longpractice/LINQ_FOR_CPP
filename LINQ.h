@@ -101,24 +101,26 @@ TOriginContainer OrderByDescending
 **
 ** You call this like
 ** std::vector<int> myVec{1,3,4,2,2};
-** std::vector<float> myInvFloatVec = Select<float>(myVec, [](int i){return 1.0f/i;});
+** auto myInvFloatVec = Select(myVec, [](int i){return 1.0f/i;});
 **
-** You need to specify the underlining element type in the type argument.
+** You don't need to specify the underlining element type in the type argument.
 */
 template<
-            typename TSelected,
             template<typename, typename> class TOriginContainer,
             typename TOriginElement,
             typename TOriginAllocator,
-            typename TSelectFunc
+            typename TSelectFunc,
+			typename TSelected = std::result_of_t<TSelectFunc(TOriginElement)>,
+			typename TSelectedAlloc = std::allocator<TSelected>
         >
-TOriginContainer<TSelected, std::allocator<TSelected>> Select
+auto Select
 (
-        const TOriginContainer<TOriginElement, TOriginAllocator>& _origin,
-        TSelectFunc _func
+    const TOriginContainer<TOriginElement, TOriginAllocator>& _origin,
+    TSelectFunc _func
 )
+->TOriginContainer<TSelected, TSelectedAlloc>
 {
-    TOriginContainer<TSelected, std::allocator<TSelected>> selected;
+	TOriginContainer<TSelected, TSelectedAlloc> selected;
     auto inserter = std::inserter(selected, selected.end());
     std::transform(std::begin(_origin), std::end(_origin), inserter, _func);
     return selected;
