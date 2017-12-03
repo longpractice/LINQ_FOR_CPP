@@ -15,7 +15,7 @@
 ** No template parameters are needed in function call. All will be deducted.
 */
 template<typename TContainer, typename TPred>
-static inline TContainer Where(
+TContainer Where(
         const TContainer& _container,
         TPred _pred // if _pred(element) is true, then this element will be selected
         )
@@ -38,7 +38,7 @@ static inline TContainer Where(
 ** No template parameters are needed in function call. All will be deducted.
 */
 template<typename TOriginContainer, typename TOrderFunc>
-static inline TOriginContainer OrderBy
+TOriginContainer OrderBy
 (
         const TOriginContainer& _origin,
         TOrderFunc _func //transform the element to get the key
@@ -71,7 +71,7 @@ static inline TOriginContainer OrderBy
 ** No template parameters are needed in function call. All will be deducted.
 */
 template<typename TOriginContainer, typename TSelectFunc>
-static inline TOriginContainer OrderByDescending
+TOriginContainer OrderByDescending
 (
         const TOriginContainer& _origin,
         TSelectFunc _func
@@ -112,7 +112,7 @@ template<
             typename TOriginAllocator,
             typename TSelectFunc
         >
-static inline TOriginContainer<TSelected, std::allocator<TSelected>> Select
+TOriginContainer<TSelected, std::allocator<TSelected>> Select
 (
         const TOriginContainer<TOriginElement, TOriginAllocator>& _origin,
         TSelectFunc _func
@@ -128,16 +128,9 @@ static inline TOriginContainer<TSelected, std::allocator<TSelected>> Select
 
 //verifies if a class contains an element
 template <class TContainer, class TVal>
-static inline bool Contains(TContainer& container, const TVal& element)
+bool Contains(TContainer& container, const TVal& element)
 {
     return std::find(std::begin(container), std::end(container), element) != container.end();
-}
-
-//for a string containing string test, specialize the template
-template<>
-inline bool Contains(std::string& parent, const std::string& sub_string)
-{
-    return parent.find(sub_string) != std::string::npos;
 }
 
 //for a string containing string test, specialize the template
@@ -148,32 +141,27 @@ inline bool Contains(std::string& parent, const char* sub_string)
 
 
 template <typename TContainer, typename TPre>
-static bool All(const TContainer& container, TPre pred)
+bool All(const TContainer& container, TPre pred)
 {
-    bool match = true;
-    for(auto & elem : container)
-    {
-        if(!pred(elem))
-            match = false;
-    }
-    return match;
+	return std::all_of(std::begin(container), std::end(container), pred);
 }
 
 template <typename TContainer, typename TPre>
-static bool None(const TContainer &container, TPre pred)
+bool None(const TContainer &container, TPre pred)
 {
-    bool match = true;
-    for(auto & elem : container)
-    {
-        if(pred(elem))
-            match = false;
-    }
-    return match;
+	return std::none_of(std::begin(container), std::end(container), pred);
+}
+
+template <typename TContainer, typename TPre>
+bool Any(const TContainer &container, TPre pred)
+{
+	return std::any_of(std::begin(container), std::end(container), pred);
 }
 
 
+
 template <typename TTarget = double, typename TContainer>
-static TTarget Mean(const TContainer &container)
+TTarget Mean(const TContainer &container)
 {
 	TTarget mean{};
 	for (auto &elem : container)
@@ -187,7 +175,7 @@ static TTarget Mean(const TContainer &container)
 
 
 template <typename TTarget = double, typename TContainer>
-static TTarget Variant(const TContainer &container)
+TTarget Variant(const TContainer &container)
 {
 	auto mean = Mean<TTarget>(container);
 	TTarget variant{};
@@ -202,7 +190,7 @@ static TTarget Variant(const TContainer &container)
 
 
 template <typename TTarget = double, typename TContainer>
-static TTarget Standard_Deviation(const TContainer &container)
+TTarget Standard_Deviation(const TContainer &container)
 {
 	auto variant = Variant<TTarget>(container);
 	TTarget standard_deviation = sqrt(variant);
