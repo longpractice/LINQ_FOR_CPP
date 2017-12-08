@@ -42,9 +42,9 @@ int main()
 	//test Select()
 	{
 		std::vector<int> myVec{ 1,3,4,2,2 };
-		auto myInvFloatVec = Select(myVec, [](int i) {return (float)(1.0f / i); });
+		auto myInvFloatVec = Transform(myVec, [](int i) {return (float)(1.0f / i); });
 		Assert(myInvFloatVec == std::vector<float>{1.0f/1, 1.0f/3, 1.0f/4, 1.0f/2, 1.0f/2});
-		std::cout << "Select() tested." << std::endl;
+		std::cout << "Transform() tested." << std::endl;
 	}
 
 
