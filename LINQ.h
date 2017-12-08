@@ -94,7 +94,7 @@ TOriginContainer OrderByDescending
 
 
 /*
-** A C++ Version of LINQ Select()
+** A C++ Version of LINQ Select(), more precisely called Transform here since select normally is used for selecting columns
 **
 ** Return a new container with the elements transformed by TSelectFunc _func
 ** This could run not as member function but as a wrapper function.
@@ -109,21 +109,21 @@ template<
             template<typename, typename> class TOriginContainer,
             typename TOriginElement,
             typename TOriginAllocator,
-            typename TSelectFunc,
-			typename TSelected = std::result_of_t<TSelectFunc(TOriginElement)>,
-			typename TSelectedAlloc = std::allocator<TSelected>
+            typename TTransformFunc,
+            typename TTransformed = typename std::result_of<TTransformFunc(TOriginElement)>::type,
+            typename TTransformedAlloc = std::allocator<TTransformed>
         >
-auto Select
+auto Transform
 (
     const TOriginContainer<TOriginElement, TOriginAllocator>& _origin,
-    TSelectFunc _func
+    TTransformFunc _func
 )
-->TOriginContainer<TSelected, TSelectedAlloc>
+->TOriginContainer<TTransformed, TTransformedAlloc>
 {
-	TOriginContainer<TSelected, TSelectedAlloc> selected;
-    auto inserter = std::inserter(selected, selected.end());
+    TOriginContainer<TTransformed, TTransformedAlloc> transformed;
+    auto inserter = std::inserter(transformed, transformed.end());
     std::transform(std::begin(_origin), std::end(_origin), inserter, _func);
-    return selected;
+    return transformed;
 }
 
 
